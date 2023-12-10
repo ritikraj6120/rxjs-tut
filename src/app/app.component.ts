@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Observable,of,from } from 'rxjs';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Observable, of, from, fromEvent,debounceTime } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,10 +10,11 @@ export class AppComponent {
   agents: Observable<string> | undefined;
   agentName: string | undefined;
   studentList: Observable<string[]> = of(['ram', 'shyam', 'radha']);
-  studentId:Observable<number[]> = of([1,2,3]);
-  singleStudentId$:Observable<number> =of(10);
-  studentObject$:Observable<any> = of({name:"ram",class:"5th"});
-  studentList$:Observable<string> = from(["mohan","shiva","pyarre"])
+  studentId: Observable<number[]> = of([1, 2, 3]);
+  singleStudentId$: Observable<number> = of(10);
+  studentObject$: Observable<any> = of({ name: 'ram', class: '5th' });
+  studentList$: Observable<string> = from(['mohan', 'shiva', 'pyarre']);
+  @ViewChild('validate') validate: ElementRef;
   constructor() {}
 
   ngOnInit(): void {
@@ -33,17 +34,24 @@ export class AppComponent {
     this.studentList.subscribe((data) => {
       console.log(data);
     });
-    this.studentId.subscribe((data)=>{
+    this.studentId.subscribe((data) => {
       console.log(data);
-    })
-    this.singleStudentId$.subscribe((data)=>{
+    });
+    this.singleStudentId$.subscribe((data) => {
       console.log(data);
-    })
-    this.studentObject$.subscribe((data)=>{
-      console.log(data)
-    })
-    this.studentList$.subscribe((data)=>{
-      console.log(data)
-    })
+    });
+    this.studentObject$.subscribe((data) => {
+      console.log(data);
+    });
+    this.studentList$.subscribe((data) => {
+      console.log(data);
+    });
+  }
+
+  rxJsEventObservable() {
+    const btnObservable$ = fromEvent(this.validate?.nativeElement, 'mouseout');
+    btnObservable$.subscribe((data) => {
+      console.log(data);
+    });
   }
 }
