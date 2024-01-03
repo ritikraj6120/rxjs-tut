@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Observable, of, from, fromEvent,debounceTime } from 'rxjs';
+import { Observable, of, from, fromEvent, debounceTime } from 'rxjs';
+import {DataService} from './data.service'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,7 +16,7 @@ export class AppComponent {
   studentObject$: Observable<any> = of({ name: 'ram', class: '5th' });
   studentList$: Observable<string> = from(['mohan', 'shiva', 'pyarre']);
   @ViewChild('validate') validate: ElementRef;
-  constructor() {}
+  constructor(public ds:DataService) {}
 
   ngOnInit(): void {
     this.agents = new Observable((abc) => {
@@ -27,31 +28,19 @@ export class AppComponent {
         abc.error(e);
       }
     });
-
     this.agents.subscribe((data) => {
       this.agentName = data;
     });
-    this.studentList.subscribe((data) => {
-      console.log(data);
-    });
-    this.studentId.subscribe((data) => {
-      console.log(data);
-    });
-    this.singleStudentId$.subscribe((data) => {
-      console.log(data);
-    });
-    this.studentObject$.subscribe((data) => {
-      console.log(data);
-    });
-    this.studentList$.subscribe((data) => {
-      console.log(data);
-    });
   }
 
-  rxJsEventObservable() {
-    const btnObservable$ = fromEvent(this.validate?.nativeElement, 'mouseout');
-    btnObservable$.subscribe((data) => {
-      console.log(data);
-    });
+  onClick(){
+    this.ds.fetchItem()
   }
+
+  // rxJsEventObservable() {
+  //   const btnObservable$ = fromEvent(this.validate?.nativeElement, 'mouseout');
+  //   btnObservable$.subscribe((data) => {
+  //     console.log(data);
+  //   });
+  // }
 }
